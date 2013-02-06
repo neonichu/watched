@@ -1,0 +1,3 @@
+[submodule "vendor/shores"]
+	path = vendor/shores
+	url = https://github.com/neonichu/shores.git
