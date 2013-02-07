@@ -16,24 +16,35 @@ def debug(thing):
     return
 
 # Shared with shores
-def get_credentials():
+def get_config():
     cfg_path = os.path.expandvars('$HOME/.shores/config')
-    cfg = ConfigParser.ConfigParser()
+    cfg = ConfigParser.ConfigParser(defaults={'videoplayer': 'QuickTimePlayer'})
     cfg.read(cfg_path)
+    return cfg
+
+def get_credentials():
+    cfg = get_config()
     watchedLiUser = cfg.get('shores', 'watchedLiUser')
     watchedLiPass = cfg.get('shores', 'watchedLiPass')
     return (watchedLiUser, watchedLiPass)
 
+def get_videoplayer():
+    cfg = get_config()
+    return cfg.get('watched', 'videoPlayer')
+
 if __name__ == '__main__':
-    video_path = osascript.osascript(os.path.join(wd, 'QuickTimePlayer_Log.scpt'))
+    video_player = get_videoplayer()
+    debug(video_player)
+
+    video_path = osascript.osascript(os.path.join(wd, '%s_Log.scpt' % video_player))
     if not video_path:
-        print 'Could not get video from QuickTime Player.'
+        print 'Could not get video from %s.' % video_player
         sys.exit(1)
 
     video_info = guess_file_info(video_path, 'autodetect')
     if not video_info.has_key('type') or video_info['type'] != 'episode':
-        print 'QuickTime Player is not playing a TV show episode.'
         debug(video_info)
+        print '%s is not playing a TV show episode.' % video_player
         sys.exit(1)
 
     show = video_info['series']
