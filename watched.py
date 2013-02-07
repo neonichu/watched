@@ -11,6 +11,10 @@ wd = os.path.dirname(sys.argv[0])
 sys.path.append(os.path.join(wd, 'vendor/shores'))
 from watchedli import WatchedLi
 
+def debug(thing):
+    #print thing
+    return
+
 # Shared with shores
 def get_credentials():
     cfg_path = os.path.expandvars('$HOME/.shores/config')
@@ -29,11 +33,13 @@ if __name__ == '__main__':
     video_info = guess_file_info(video_path, 'autodetect')
     if not video_info.has_key('type') or video_info['type'] != 'episode':
         print 'QuickTime Player is not playing a TV show episode.'
+        debug(video_info)
         sys.exit(1)
 
     show = video_info['series']
     episode_id = 'S%02dE%02d' % (int(video_info['season']),
             int(video_info['episodeNumber']))
+    debug(show + ' ' + episode_id)
 
     # FIXME: Workaround for 'Rizzoli & Isles', need a better solution
     show = show.replace('and ', '')
@@ -43,6 +49,7 @@ if __name__ == '__main__':
     episodes = client.episodes(show)
     for episode in episodes:
         if episode['id'] == episode_id:
+            debug('marking ' + episode['wid'])
             try:
                 if client.markEpisode(episode):
                     print 'Done.'
