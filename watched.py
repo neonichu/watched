@@ -45,8 +45,14 @@ if __name__ == '__main__':
     show = show.replace('and ', '')
 
     credentials = get_credentials()
-    client = WatchedLi(credentials[0], credentials[1])
-    episodes = client.episodes(show)
+
+    try:
+        client = WatchedLi(credentials[0], credentials[1])
+        episodes = client.episodes(show)
+    except BaseException, e:
+        print e
+        sys.exit(1)
+
     for episode in episodes:
         if episode['id'] == episode_id:
             debug('marking ' + episode['wid'])
@@ -54,7 +60,7 @@ if __name__ == '__main__':
                 if client.markEpisode(episode):
                     print 'Done.'
                     sys.exit(0)
-            except Exception, e:
+            except BaseException, e:
                 print e
                 sys.exit(1)
 
