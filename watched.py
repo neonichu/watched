@@ -43,9 +43,13 @@ if __name__ == '__main__':
     episodes = client.episodes(show)
     for episode in episodes:
         if episode['id'] == episode_id:
-            if client.markEpisode(episode):
-                print 'Done.'
-                sys.exit(0)
+            try:
+                if client.markEpisode(episode):
+                    print 'Done.'
+                    sys.exit(0)
+            except Exception, e:
+                print e
+                sys.exit(1)
 
     print 'Failure.'
     sys.exit(1)
