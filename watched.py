@@ -7,7 +7,8 @@ import sys
 
 from guessit import guess_file_info
 
-sys.path.append('./vendor/shores')
+wd = os.path.dirname(sys.argv[0])
+sys.path.append(os.path.join(wd, 'vendor/shores'))
 from watchedli import WatchedLi
 
 # Shared with shores
@@ -20,7 +21,6 @@ def get_credentials():
     return (watchedLiUser, watchedLiPass)
 
 if __name__ == '__main__':
-    wd = os.path.dirname(sys.argv[0])
     video_path = osascript.osascript(os.path.join(wd, 'QuickTimePlayer_Log.scpt'))
     if not video_path:
         print 'Could not get video from QuickTime Player.'
