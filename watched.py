@@ -71,7 +71,7 @@ if __name__ == '__main__':
                 if client.markEpisode(episode):
                     print 'Done.'
                     sys.exit(0)
-            except BaseException, e:
+            except Exception, e:
                 print e
                 sys.exit(1)
 
